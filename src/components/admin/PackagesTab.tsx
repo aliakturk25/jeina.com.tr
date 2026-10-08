@@ -121,8 +121,7 @@ export const PackagesTab: React.FC<PackagesTabProps> = ({ packages, onRefresh })
 
   const handleDelete = (id: string) => {
     if (confirm('Bu paketi silmek istediğinize emin misiniz?')) {
-      const currentList = storage.getPackages().filter(p => p.id !== id);
-      storage.savePackages(currentList);
+      storage.deletePackage(id);
       onRefresh();
     }
   };

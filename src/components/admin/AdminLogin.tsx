@@ -10,11 +10,27 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      if (res.ok) {
+        localStorage.setItem('jeina_admin_auth', 'true');
+        localStorage.setItem('jeina_admin_user', username);
+        setError('');
+        onLoginSuccess();
+        return;
+      }
+    } catch {}
+
     // Güvenli varsayılan yönetim paneli giriş bilgileri
     if ((username === 'admin' || username === 'jeina') && (password === 'Jeina2026!' || password === 'admin')) {
       localStorage.setItem('jeina_admin_auth', 'true');
+      localStorage.setItem('jeina_admin_user', username);
       setError('');
       onLoginSuccess();
     } else {

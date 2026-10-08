@@ -154,8 +154,7 @@ export const PagesTab: React.FC<PagesTabProps> = ({ pages, onRefresh, onPreviewP
 
   const handleDelete = (id: string) => {
     if (confirm('Bu sayfayı silmek istediğinize emin misiniz?')) {
-      const currentList = storage.getPages().filter(p => p.id !== id);
-      storage.savePages(currentList);
+      storage.deletePage(id);
       onRefresh();
     }
   };

@@ -24,8 +24,11 @@ import { IntegrationPackage, DynamicPage, DemoLead, ContactMessage, SiteSettings
 export const App: React.FC = () => {
   const isInitialAdmin = () => {
     return (
+      window.location.pathname.startsWith('/jeina') ||
       window.location.pathname.startsWith('/admin') ||
+      window.location.hash.includes('jeina') ||
       window.location.hash.includes('admin') ||
+      window.location.search.includes('jeina') ||
       window.location.search.includes('admin') ||
       localStorage.getItem('jeina_active_view') === 'admin'
     );
@@ -47,11 +50,11 @@ export const App: React.FC = () => {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(storage.getSettings());
 
-  const refreshData = () => {
-    setPackages(storage.getPackages());
-    setPages(storage.getPages());
-    setLeads(storage.getLeads());
-    setMessages(storage.getMessages());
+  const refreshData = async () => {
+    setPackages(await storage.getPackagesAsync());
+    setPages(await storage.getPagesAsync());
+    setLeads(await storage.getLeadsAsync());
+    setMessages(await storage.getMessagesAsync());
     setSettings(storage.getSettings());
   };
 
@@ -64,11 +67,14 @@ export const App: React.FC = () => {
     if (newView === 'page' && slug) {
       setView('page');
       setActiveSlug(slug);
+      window.history.pushState(null, '', `/paketler/${slug}`);
     } else if (newView === 'admin') {
       setView('admin');
+      window.history.pushState(null, '', '/jeina');
     } else {
       setView(newView as any);
       setActiveSlug(undefined);
+      window.history.pushState(null, '', '/');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -77,6 +83,7 @@ export const App: React.FC = () => {
     localStorage.removeItem('jeina_admin_auth');
     setIsAuthenticated(false);
     setView('home');
+    window.history.pushState(null, '', '/');
   };
 
   const handleSelectPackage = (packageName: string) => {

@@ -219,6 +219,63 @@ const defaultSettings: SiteSettings = {
 };
 
 export const storage = {
+  // Sync with SQL API
+  async getPackagesAsync(): Promise<IntegrationPackage[]> {
+    try {
+      const res = await fetch('/api/packages');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          localStorage.setItem(PACKAGES_KEY, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch {}
+    return this.getPackages();
+  },
+
+  async getPagesAsync(): Promise<DynamicPage[]> {
+    try {
+      const res = await fetch('/api/pages');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          localStorage.setItem(PAGES_KEY, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch {}
+    return this.getPages();
+  },
+
+  async getLeadsAsync(): Promise<DemoLead[]> {
+    try {
+      const res = await fetch('/api/leads');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          localStorage.setItem(LEADS_KEY, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch {}
+    return this.getLeads();
+  },
+
+  async getMessagesAsync(): Promise<ContactMessage[]> {
+    try {
+      const res = await fetch('/api/contact');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          localStorage.setItem(MESSAGES_KEY, JSON.stringify(data));
+          return data;
+        }
+      }
+    } catch {}
+    return this.getMessages();
+  },
+
   getPackages(): IntegrationPackage[] {
     const raw = localStorage.getItem(PACKAGES_KEY);
     if (!raw) {
@@ -228,6 +285,22 @@ export const storage = {
     return JSON.parse(raw);
   },
   savePackages(packages: IntegrationPackage[]) {
+    localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages));
+    try {
+      packages.forEach(pkg => {
+        fetch('/api/packages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(pkg)
+        }).catch(() => {});
+      });
+    } catch {}
+  },
+  deletePackage(id: string) {
+    try {
+      fetch(`/api/packages/${id}`, { method: 'DELETE' }).catch(() => {});
+    } catch {}
+    const packages = this.getPackages().filter(p => p.id !== id);
     localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages));
   },
   getPages(): DynamicPage[] {
@@ -239,6 +312,22 @@ export const storage = {
     return JSON.parse(raw);
   },
   savePages(pages: DynamicPage[]) {
+    localStorage.setItem(PAGES_KEY, JSON.stringify(pages));
+    try {
+      pages.forEach(page => {
+        fetch('/api/pages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(page)
+        }).catch(() => {});
+      });
+    } catch {}
+  },
+  deletePage(id: string) {
+    try {
+      fetch(`/api/pages/${id}`, { method: 'DELETE' }).catch(() => {});
+    } catch {}
+    const pages = this.getPages().filter(p => p.id !== id);
     localStorage.setItem(PAGES_KEY, JSON.stringify(pages));
   },
   getPageBySlug(slug: string): DynamicPage | undefined {
@@ -253,6 +342,16 @@ export const storage = {
     return JSON.parse(raw);
   },
   addLead(lead: Omit<DemoLead, 'id' | 'createdAt' | 'status'>): DemoLead {
+    // 1. Asenkron olarak MS SQL API'sine gönder
+    try {
+      fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      }).catch(() => {});
+    } catch {}
+
+    // 2. Tarayıcıda da anında göster
     const leads = this.getLeads();
     const newLead: DemoLead = {
       ...lead,
@@ -265,6 +364,14 @@ export const storage = {
     return newLead;
   },
   updateLeadStatus(id: string, status: DemoLead['status']) {
+    try {
+      fetch(`/api/leads/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      }).catch(() => {});
+    } catch {}
+
     const leads = this.getLeads();
     const target = leads.find(l => l.id === id);
     if (target) {
@@ -273,6 +380,10 @@ export const storage = {
     }
   },
   deleteLead(id: string) {
+    try {
+      fetch(`/api/leads/${id}`, { method: 'DELETE' }).catch(() => {});
+    } catch {}
+
     const leads = this.getLeads().filter(l => l.id !== id);
     localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
   },
@@ -285,6 +396,14 @@ export const storage = {
     return JSON.parse(raw);
   },
   addMessage(msg: Omit<ContactMessage, 'id' | 'createdAt' | 'isRead'>): ContactMessage {
+    try {
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(msg)
+      }).catch(() => {});
+    } catch {}
+
     const msgs = this.getMessages();
     const newMsg: ContactMessage = {
       ...msg,
@@ -297,6 +416,9 @@ export const storage = {
     return newMsg;
   },
   markMessageRead(id: string) {
+    try {
+      fetch(`/api/contact/${id}/read`, { method: 'PUT' }).catch(() => {});
+    } catch {}
     const msgs = this.getMessages();
     const target = msgs.find(m => m.id === id);
     if (target) {
@@ -312,7 +434,48 @@ export const storage = {
     }
     return JSON.parse(raw);
   },
+  async getSettingsAsync(): Promise<SiteSettings> {
+    try {
+      const res = await fetch('/api/settings');
+      if (res.ok) {
+        const dict = await res.json();
+        const current = this.getSettings();
+        const merged: SiteSettings = {
+          siteTitle: dict['siteTitle'] || current.siteTitle,
+          tagline: dict['tagline'] || current.tagline,
+          phone: dict['phone'] || current.phone,
+          email: dict['email'] || current.email,
+          address: dict['address'] || current.address,
+          telegramBotToken: dict['telegramBotToken'] || current.telegramBotToken,
+          telegramChatId: dict['telegramChatId'] || current.telegramChatId,
+          enableTelegramNotification: dict['enableTelegramNotification'] === 'true' || current.enableTelegramNotification
+        };
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
+        return merged;
+      }
+    } catch {}
+    return this.getSettings();
+  },
   saveSettings(settings: SiteSettings) {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    try {
+      const dict: Record<string, string> = {
+        siteTitle: settings.siteTitle,
+        tagline: settings.tagline,
+        phone: settings.phone,
+        email: settings.email,
+        address: settings.address,
+        telegramBotToken: settings.telegramBotToken || '',
+        telegramChatId: settings.telegramChatId || '',
+        enableTelegramNotification: String(settings.enableTelegramNotification)
+      };
+      fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dict)
+      }).catch(() => {});
+    } catch {}
   }
 };
+
+
