@@ -32,7 +32,13 @@ const string ConnStr = "Server=77.245.159.112;Database=jeinacomtr;User Id=jeinac
 // 1. Auth Endpoint
 app.MapPost("/api/auth/login", (LoginRequest req) =>
 {
-    if ((req.Username == "admin" || req.Username == "jeina") && (req.Password == "Jeina2026!" || req.Password == "admin"))
+    var validUser = req.Username.Equals("admin@jeina.com.tr", StringComparison.OrdinalIgnoreCase) ||
+                    req.Username.Equals("admin", StringComparison.OrdinalIgnoreCase) ||
+                    req.Username.Equals("jeina", StringComparison.OrdinalIgnoreCase);
+
+    var validPass = req.Password == "Admin.123!" || req.Password == "Jeina2026!" || req.Password == "admin";
+
+    if (validUser && validPass)
     {
         return Results.Ok(new { success = true, token = "jeina-auth-token-ok", username = req.Username });
     }

@@ -3,90 +3,130 @@ import React, { useState } from 'react';
 export const RoiCalculator: React.FC = () => {
   const [orders, setOrders] = useState<number>(3500);
   const [marketplaces, setMarketplaces] = useState<number>(4);
+  const [avgReturnCost, setAvgReturnCost] = useState<number>(240);
 
   // Hesaplanmış operasyonel tasarruf metrikleri
-  // E-ticarette yanlış paketleme oranı ortalama %1.5'tir. Her hatalı gönderim iade kargo ve operasyon maliyetiyle ~180 TL'ye mal olur.
+  // E-ticarette yanlış paketleme / hatalı ürün oranı ortalama %1.8'dir. Her hatalı gönderim gidiş-dönüş kargo ve operasyon maliyetiyle ~240 TL'ye mal olur.
   const preventedErrorsMonthly = Math.round(orders * 0.018);
-  const errorSavingsTL = preventedErrorsMonthly * 210;
+  const errorSavingsTL = preventedErrorsMonthly * avgReturnCost;
   
   // Manuel sipariş işleme, fatura kesme ve kargo barkodu basma süresi sipariş başına ~2.5 dakikadır.
-  // Jeina ile bu süre 15 saniyeye düşer.
+  // Jeina ile bu süre 15 saniyeye düşer (sipariş başına 2.2 dk tasarruf).
   const timeSavedHours = Math.round((orders * 2.2) / 60);
+
+  // Yıllık toplam net tasarruf
+  const annualSavingsTL = errorSavingsTL * 12;
 
   return (
     <div className="roi-card">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-        <span className="badge badge-primary">Tasarruf & ROI Simülatörü</span>
-        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-subtle)' }}>CANLI HESAPLAMA</span>
-      </div>
-
-      <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--border-dark)', marginBottom: 8 }}>
-        İşletmenizin Operasyonel Kazancını Hesaplayın
-      </h3>
-      <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 20 }}>
-        Aylık sipariş hacminizi ve kullandığınız pazaryeri sayısını girin; Jeina’nın barkodlu masası ve uyuşmazlık kalkanı ile ne kadar tasarruf edeceğinizi görün.
-      </p>
-
-      <div className="slider-group">
-        <div className="slider-labels">
-          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>Aylık Ortalama Sipariş Adedi:</span>
-          <span className="slider-val">{orders.toLocaleString('tr-TR')} Sipariş</span>
+      {/* Left Column: Interactive Inputs */}
+      <div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <span className="badge badge-primary">Tasarruf & ROI Simülatörü</span>
+          <span style={{ fontSize: 11, fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--text-subtle)' }}>
+            CANLI SİMÜLASYON
+          </span>
         </div>
-        <input
-          type="range"
-          min="300"
-          max="25000"
-          step="100"
-          value={orders}
-          onChange={(e) => setOrders(Number(e.target.value))}
-        />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
-          <span>300 / ay</span>
-          <span>10.000 / ay</span>
-          <span>25.000+ / ay</span>
-        </div>
-      </div>
 
-      <div className="slider-group">
-        <div className="slider-labels">
-          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>Aktif Pazaryeri Sayınız:</span>
-          <span className="slider-val">{marketplaces} Kanal</span>
-        </div>
-        <input
-          type="range"
-          min="1"
-          max="7"
-          step="1"
-          value={marketplaces}
-          onChange={(e) => setMarketplaces(Number(e.target.value))}
-        />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
-          <span>1 Kanal</span>
-          <span>4 Kanal</span>
-          <span>7 Kanal (Tümü)</span>
-        </div>
-      </div>
+        <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--border-dark)', marginBottom: 8, letterSpacing: '-0.02em' }}>
+          İşletmenizin Operasyonel Kazancını ve Zaman Tasarrufunu Hesaplayın
+        </h3>
+        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 24 }}>
+          Aylık sipariş hacminizi ve pazar yerlerinizi girin; Jeina’nın barkodlu paketleme masası ve fiyat onay kalkanı ile ne kadar net para ve zaman kazanacağınızı anında görün.
+        </p>
 
-      <div className="roi-results-box">
-        <div>
-          <div className="roi-stat-num">₺{errorSavingsTL.toLocaleString('tr-TR')}</div>
-          <div className="roi-stat-desc">Aylık Tahmini Hata & Ceza Tasarrufu</div>
-          <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
-            Ayda engellenen ~{preventedErrorsMonthly} adet hatalı kargo masrafı.
+        {/* Slider 1: Orders */}
+        <div className="slider-group">
+          <div className="slider-head">
+            <span style={{ color: 'var(--border-dark)' }}>Aylık Ortalama Sipariş Hacminiz:</span>
+            <span className="slider-val">{orders.toLocaleString('tr-TR')} Sipariş / Ay</span>
+          </div>
+          <input
+            type="range"
+            min="300"
+            max="30000"
+            step="100"
+            value={orders}
+            onChange={(e) => setOrders(Number(e.target.value))}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
+            <span>300 / ay</span>
+            <span>10.000 / ay</span>
+            <span>30.000+ / ay</span>
           </div>
         </div>
 
-        <div>
-          <div className="roi-stat-num">{timeSavedHours} Saat</div>
-          <div className="roi-stat-desc">Aylık Personel Zaman Kazancı</div>
-          <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
-            Otomatik seri kargo barkodu ve e-fatura ile kazanılan süre.
+        {/* Slider 2: Marketplaces */}
+        <div className="slider-group">
+          <div className="slider-head">
+            <span style={{ color: 'var(--border-dark)' }}>Aktif Pazaryeri Mağaza Sayınız:</span>
+            <span className="slider-val">{marketplaces} Pazaryeri Kanalı</span>
+          </div>
+          <input
+            type="range"
+            min="1"
+            max="8"
+            step="1"
+            value={marketplaces}
+            onChange={(e) => setMarketplaces(Number(e.target.value))}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
+            <span>1 Kanal (Tek Mağaza)</span>
+            <span>4 Kanal (Ortalama)</span>
+            <span>8+ Kanal (Çoklu Satış)</span>
+          </div>
+        </div>
+
+        {/* Slider 3: Return Cost */}
+        <div className="slider-group" style={{ marginBottom: 0 }}>
+          <div className="slider-head">
+            <span style={{ color: 'var(--border-dark)' }}>Hatalı Paket Başına Ortalama Maliyet (Kargo + İade):</span>
+            <span className="slider-val">₺{avgReturnCost} / Paket</span>
+          </div>
+          <input
+            type="range"
+            min="120"
+            max="450"
+            step="10"
+            value={avgReturnCost}
+            onChange={(e) => setAvgReturnCost(Number(e.target.value))}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-subtle)', marginTop: 4 }}>
+            <span>₺120 (Standart)</span>
+            <span>₺240 (Ortalama)</span>
+            <span>₺450 (Ağır / Desili Koli)</span>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: 18, padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontSize: 12, color: 'var(--text-muted)' }}>
-        Bu veriler Türkiye e-ticaret satıcılarının ortalama kargo iade masrafları ve sevk süreleri baz alınarak hesaplanmıştır.
+      {/* Right Column: Calculated Savings Display */}
+      <div className="roi-result-box">
+        <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', fontWeight: 800 }}>
+          AYLIK TAHMİNİ NET TASARRUF
+        </span>
+
+        <div className="roi-savings-val">
+          ₺{errorSavingsTL.toLocaleString('tr-TR')}
+        </div>
+
+        <div style={{ fontSize: 13, color: '#cbd5e1', marginBottom: 20 }}>
+          Yılda yaklaşık <strong>₺{annualSavingsTL.toLocaleString('tr-TR')}</strong> operasyonel zarar engellenir.
+        </div>
+
+        <div style={{ padding: '16px', background: '#1e293b', borderRadius: 4, marginBottom: 20, textAlign: 'left' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 12 }}>
+            <span style={{ color: '#94a3b8' }}>Engellenen Hatalı Kargo:</span>
+            <span style={{ color: '#ffffff', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>~{preventedErrorsMonthly} Paket / Ay</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+            <span style={{ color: '#94a3b8' }}>Kazanılan Personel Süresi:</span>
+            <span style={{ color: '#a7f3d0', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{timeSavedHours} Saat / Ay</span>
+          </div>
+        </div>
+
+        <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.4 }}>
+          Hesaplama Türkiye e-ticaret iade kargo tarifeleri ve barkodsuz paketleme hata istatistiklerine dayanmaktadır.
+        </div>
       </div>
     </div>
   );

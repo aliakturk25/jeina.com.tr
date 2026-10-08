@@ -75,9 +75,10 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, pages }
           <button
             className="btn btn-secondary btn-sm"
             onClick={() => onNavigate('admin')}
-            title="Sadece tanıtım sitesi vitrinini yönetebileceğiniz CMS panel"
+            title="Tanıtım sitesi CMS yönetim paneli"
+            style={{ fontSize: 12, fontWeight: 700 }}
           >
-            CMS Paneli
+            CMS Girişi (/jeina)
           </button>
           <button
             className="btn btn-primary btn-sm"

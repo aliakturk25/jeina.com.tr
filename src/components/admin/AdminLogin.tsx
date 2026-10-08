@@ -27,8 +27,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
       }
     } catch {}
 
-    // Güvenli varsayılan yönetim paneli giriş bilgileri
-    if ((username === 'admin' || username === 'jeina') && (password === 'Jeina2026!' || password === 'admin')) {
+    // Güvenli yönetim paneli giriş bilgileri
+    const normalizedUser = username.trim().toLowerCase();
+    const isValidUser = normalizedUser === 'admin@jeina.com.tr' || normalizedUser === 'admin' || normalizedUser === 'jeina';
+    const isValidPass = password === 'Admin.123!' || password === 'Jeina2026!' || password === 'admin';
+
+    if (isValidUser && isValidPass) {
       localStorage.setItem('jeina_admin_auth', 'true');
       localStorage.setItem('jeina_admin_user', username);
       setError('');
@@ -47,12 +51,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
       justifyContent: 'center',
       padding: 20
     }}>
-      <div className="sharp-card" style={{ width: 420, padding: 36, backgroundColor: '#ffffff' }}>
+      <div className="sharp-card" style={{ width: 440, padding: 40, backgroundColor: '#ffffff', boxShadow: 'var(--shadow-lg)' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div className="logo-brand" style={{ fontSize: 28, marginBottom: 4 }}>JEINA</div>
-          <span className="badge badge-primary">Web Sitesi Yönetim Paneli (CMS)</span>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 10 }}>
-            Lütfen devam etmek için yönetici kimlik bilgilerinizi giriniz.
+          <div className="logo-brand" style={{ fontSize: 30, marginBottom: 6, letterSpacing: '-0.02em' }}>JEINA</div>
+          <span className="badge badge-primary" style={{ padding: '4px 10px', fontSize: 11 }}>CMS Yönetim Kokpiti</span>
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }}>
+            Sistem tanıtım vitrinini yönetmek için lütfen yönetici bilgilerinizi giriniz.
           </p>
         </div>
 
@@ -63,7 +67,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
             backgroundColor: '#fef2f2',
             border: '1px solid #fecaca',
             color: '#dc2626',
-            borderRadius: 2,
+            borderRadius: 4,
             fontSize: 13,
             fontWeight: 600
           }}>
@@ -73,13 +77,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label className="form-label">Yönetici Kullanıcı Adı</label>
+            <label className="form-label" style={{ fontSize: 12, fontWeight: 700 }}>Yönetici E-Posta / Kullanıcı Adı</label>
             <input
               type="text"
               className="form-input"
               required
               autoFocus
-              placeholder="admin"
+              placeholder="admin@jeina.com.tr"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
