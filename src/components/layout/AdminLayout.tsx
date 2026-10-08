@@ -5,6 +5,7 @@ interface AdminLayoutProps {
   activeTab: string;
   onSelectTab: (tab: string) => void;
   onExitAdmin: () => void;
+  onLogout: () => void;
   leads: DemoLead[];
   children: React.ReactNode;
 }
@@ -13,6 +14,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   activeTab,
   onSelectTab,
   onExitAdmin,
+  onLogout,
   leads,
   children
 }) => {
@@ -53,13 +55,20 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           ))}
         </nav>
 
-        <div style={{ padding: 16, borderTop: '1px solid #1e293b' }}>
+        <div style={{ padding: 16, borderTop: '1px solid #1e293b', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button
             className="btn btn-secondary btn-sm"
             style={{ width: '100%', color: '#ffffff', backgroundColor: '#1e293b', borderColor: '#334155' }}
             onClick={onExitAdmin}
           >
             ← Vitrin Sitesine Dön
+          </button>
+          <button
+            className="btn btn-sm"
+            style={{ width: '100%', color: '#f87171', backgroundColor: '#1e293b', borderColor: '#7f1d1d' }}
+            onClick={onLogout}
+          >
+            Güvenli Çıkış Yap
           </button>
         </div>
       </aside>

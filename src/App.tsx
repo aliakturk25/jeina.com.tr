@@ -16,15 +16,30 @@ import { PackagesTab } from './components/admin/PackagesTab';
 import { PagesTab } from './components/admin/PagesTab';
 import { MessagesTab } from './components/admin/MessagesTab';
 import { SettingsTab } from './components/admin/SettingsTab';
+import { AdminLogin } from './components/admin/AdminLogin';
 
 import { storage } from './services/storage';
 import { IntegrationPackage, DynamicPage, DemoLead, ContactMessage, SiteSettings } from './types';
 
 export const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'integrations' | 'pricing' | 'demo' | 'contact' | 'page' | 'admin'>('home');
+  const isInitialAdmin = () => {
+    return (
+      window.location.pathname.startsWith('/admin') ||
+      window.location.hash.includes('admin') ||
+      window.location.search.includes('admin') ||
+      localStorage.getItem('jeina_active_view') === 'admin'
+    );
+  };
+
+  const [view, setView] = useState<'home' | 'integrations' | 'pricing' | 'demo' | 'contact' | 'page' | 'admin'>(
+    isInitialAdmin() ? 'admin' : 'home'
+  );
   const [activeSlug, setActiveSlug] = useState<string | undefined>();
   const [adminTab, setAdminTab] = useState<string>('dashboard');
   const [selectedPackageForDemo, setSelectedPackageForDemo] = useState<string | undefined>();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('jeina_admin_auth') === 'true';
+  });
 
   const [packages, setPackages] = useState<IntegrationPackage[]>([]);
   const [pages, setPages] = useState<DynamicPage[]>([]);
@@ -42,6 +57,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     refreshData();
+    localStorage.removeItem('jeina_active_view');
   }, []);
 
   const handleNavigate = (newView: string, slug?: string) => {
@@ -57,6 +73,12 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('jeina_admin_auth');
+    setIsAuthenticated(false);
+    setView('home');
+  };
+
   const handleSelectPackage = (packageName: string) => {
     setSelectedPackageForDemo(packageName);
     setView('demo');
@@ -65,11 +87,21 @@ export const App: React.FC = () => {
 
   // Admin View
   if (view === 'admin') {
+    if (!isAuthenticated) {
+      return (
+        <AdminLogin
+          onLoginSuccess={() => setIsAuthenticated(true)}
+          onCancel={() => setView('home')}
+        />
+      );
+    }
+
     return (
       <AdminLayout
         activeTab={adminTab}
         onSelectTab={setAdminTab}
         onExitAdmin={() => setView('home')}
+        onLogout={handleLogout}
         leads={leads}
       >
         {adminTab === 'dashboard' && (
