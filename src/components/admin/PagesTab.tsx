@@ -161,47 +161,47 @@ export const PagesTab: React.FC<PagesTabProps> = ({ pages, onRefresh, onPreviewP
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--border-dark)' }}>Dinamik Sayfa Oluşturucu (Landing Page Builder)</h2>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+          <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)', margin: 0, letterSpacing: '-0.02em' }}>Dinamik Sayfa Oluşturucu (Landing Page Builder)</h2>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
             Kod yazmadan istediğiniz pazaryeri veya entegrasyon çözümü için yeni vitrin sayfaları oluşturun ve yayınlayın.
           </p>
         </div>
-        <button className="btn btn-primary" onClick={openNew}>
-          + Yeni Sayfa / Paket Oluştur
+        <button className="btn btn-primary btn-sm" style={{ padding: '6px 14px', fontSize: 12 }} onClick={openNew}>
+          + Yeni Sayfa Oluştur
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {pages.map(page => (
-          <div key={page.id} className="sharp-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div key={page.id} className="sharp-card" style={{ padding: '14px 18px', borderRadius: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span className="badge badge-primary">{page.targetMarketplace || 'Genel'}</span>
-                <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)' }}>{page.title}</h3>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-subtle)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="badge badge-primary" style={{ fontSize: 10 }}>{page.targetMarketplace || 'Genel'}</span>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: 'var(--border-dark)', margin: 0 }}>{page.title}</h3>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-subtle)' }}>
                   /{page.slug}
                 </span>
               </div>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 6, maxWidth: 640 }}>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, marginBottom: 4, maxWidth: 640 }}>
                 {page.heroSubtitle}
               </p>
-              <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginTop: 8 }}>
-                Oluşturulma: {page.createdAt} | Güncelleme: {page.updatedAt} | Blok Sayısı: {page.blocks.length}
+              <div style={{ fontSize: 11, color: 'var(--text-subtle)' }}>
+                Oluşturulma: {page.createdAt} | Güncelleme: {page.updatedAt} | Blok: {page.blocks.length}
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button className="btn btn-secondary btn-sm" onClick={() => onPreviewPage(page.slug)}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '5px 10px', fontSize: 11 }} onClick={() => onPreviewPage(page.slug)}>
                 Vitrinde Gör
               </button>
-              <button className="btn btn-secondary btn-sm" onClick={() => openEdit(page)}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '5px 10px', fontSize: 11 }} onClick={() => openEdit(page)}>
                 Düzenle
               </button>
               <button
                 className="btn btn-secondary btn-sm"
-                style={{ color: 'var(--danger)' }}
+                style={{ color: 'var(--danger)', padding: '5px 10px', fontSize: 11 }}
                 onClick={() => handleDelete(page.id)}
               >
                 Sil
@@ -225,12 +225,12 @@ export const PagesTab: React.FC<PagesTabProps> = ({ pages, onRefresh, onPreviewP
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="sharp-card" style={{ width: 740, maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, borderBottom: '1px solid var(--border-color)', paddingBottom: 14 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 800 }}>
+          <div className="sharp-card" style={{ width: 680, maxHeight: '90vh', overflowY: 'auto', padding: 20, borderRadius: 4 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid var(--border-color)', paddingBottom: 10 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 800, margin: 0 }}>
                 {isCreating ? 'Yeni Entegrasyon Paketi Sayfası Oluştur' : `Düzenle: ${editingPage?.title}`}
               </h3>
-              <button className="btn btn-secondary btn-sm" onClick={() => { setIsCreating(false); setEditingPage(null); }}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '4px 8px', fontSize: 11 }} onClick={() => { setIsCreating(false); setEditingPage(null); }}>
                 Kapat
               </button>
             </div>

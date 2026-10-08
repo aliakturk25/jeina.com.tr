@@ -51,11 +51,11 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
       justifyContent: 'center',
       padding: 20
     }}>
-      <div className="sharp-card" style={{ width: 440, padding: 40, backgroundColor: '#ffffff', boxShadow: 'var(--shadow-lg)' }}>
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div className="logo-brand" style={{ fontSize: 30, marginBottom: 6, letterSpacing: '-0.02em' }}>JEINA</div>
-          <span className="badge badge-primary" style={{ padding: '4px 10px', fontSize: 11 }}>CMS Yönetim Kokpiti</span>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }}>
+      <div className="sharp-card" style={{ width: 400, padding: 32, backgroundColor: '#ffffff', borderRadius: 6, boxShadow: 'var(--shadow-lg)' }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div className="logo-brand" style={{ fontSize: 26, marginBottom: 4, letterSpacing: '-0.02em' }}>JEINA</div>
+          <span className="badge badge-primary" style={{ padding: '3px 8px', fontSize: 10 }}>CMS Yönetim Kokpiti</span>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 8 }}>
             Sistem tanıtım vitrinini yönetmek için lütfen yönetici bilgilerinizi giriniz.
           </p>
         </div>

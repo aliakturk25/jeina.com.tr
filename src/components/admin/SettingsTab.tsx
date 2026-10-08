@@ -37,21 +37,21 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onRefresh })
 
   return (
     <div style={{ maxWidth: 680 }}>
-      <div style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--border-dark)' }}>Site & Bildirim Ayarları</h2>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+      <div style={{ marginBottom: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)', margin: 0, letterSpacing: '-0.02em' }}>Site & Bildirim Ayarları</h2>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
           Tanıtım sitesinin iletişim bilgileri ve gelen demo taleplerinde anlık telefon bildirimi alma ayarları.
         </p>
       </div>
 
       {isSaved && (
-        <div style={{ marginBottom: 20, padding: '12px 16px', background: 'var(--success-bg)', border: '1px solid #a7f3d0', color: 'var(--success)', borderRadius: 2, fontSize: 13, fontWeight: 600 }}>
+        <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--success-bg)', border: '1px solid #a7f3d0', color: 'var(--success)', borderRadius: 4, fontSize: 12, fontWeight: 600 }}>
           Ayarlar başarıyla kaydedildi.
         </div>
       )}
 
-      <form onSubmit={handleSave} className="sharp-card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, borderBottom: '1px solid var(--border-color)', paddingBottom: 8 }}>
+      <form onSubmit={handleSave} className="sharp-card" style={{ padding: 20, borderRadius: 4 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14, borderBottom: '1px solid var(--border-color)', paddingBottom: 8, margin: 0 }}>
           Genel Şirket & İletişim Bilgileri
         </h3>
 

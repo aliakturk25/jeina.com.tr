@@ -56,36 +56,37 @@ export const LeadsTab: React.FC<LeadsTabProps> = ({ leads, onRefresh }) => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--border-dark)' }}>Demo Talepleri (Lead CRM)</h2>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+          <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)', margin: 0, letterSpacing: '-0.02em' }}>Demo Talepleri (Lead CRM)</h2>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
             Tanıtım sitesinden gelen tüm demo ve teklif formlarını inceleyin, durumlarını güncelleyin ve CSV olarak indirin.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn btn-secondary" onClick={exportToCSV}>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn btn-secondary btn-sm" style={{ padding: '6px 12px', fontSize: 12 }} onClick={exportToCSV}>
             CSV / Excel İndir ({leads.length})
           </button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'center', flexWrap: 'wrap' }}>
         <input
           type="text"
           className="form-input"
-          placeholder="Firma adı, yetkili, telefon veya e-posta ile ara..."
-          style={{ width: 340 }}
+          placeholder="Firma, yetkili, telefon veya e-posta ara..."
+          style={{ width: 280, height: 32, padding: '4px 10px', fontSize: 12 }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: 'flex', gap: 4 }}>
           {['TÜMÜ', 'Yeni', 'Arandı', 'Demo Yapıldı', 'Satışa Döndü', 'İptal'].map(status => (
             <button
               key={status}
               className={`btn btn-sm ${statusFilter === status ? 'btn-dark' : 'btn-secondary'}`}
+              style={{ padding: '4px 9px', fontSize: 11, height: 32 }}
               onClick={() => setStatusFilter(status)}
             >
               {status}
@@ -179,18 +180,18 @@ export const LeadsTab: React.FC<LeadsTabProps> = ({ leads, onRefresh }) => {
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="sharp-card" style={{ width: 560, maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, borderBottom: '1px solid var(--border-color)', paddingBottom: 14 }}>
+          <div className="sharp-card" style={{ width: 520, maxHeight: '90vh', overflowY: 'auto', padding: 20, borderRadius: 4 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, borderBottom: '1px solid var(--border-color)', paddingBottom: 10 }}>
               <div>
-                <span className="badge badge-primary" style={{ marginBottom: 4 }}>Talep Detayı</span>
-                <h3 style={{ fontSize: 20, fontWeight: 800 }}>{selectedLead.companyName}</h3>
+                <span className="badge badge-primary" style={{ marginBottom: 4, fontSize: 10 }}>Talep Detayı</span>
+                <h3 style={{ fontSize: 16, fontWeight: 800, margin: 0 }}>{selectedLead.companyName}</h3>
               </div>
-              <button className="btn btn-secondary btn-sm" onClick={() => setSelectedLead(null)}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '4px 8px', fontSize: 11 }} onClick={() => setSelectedLead(null)}>
                 Kapat
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: 14 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
               <div><strong>Yetkili:</strong> {selectedLead.fullName}</div>
               <div><strong>Telefon:</strong> <a href={`tel:${selectedLead.phone}`} style={{ color: 'var(--primary)', fontWeight: 700 }}>{selectedLead.phone}</a></div>
               <div><strong>Kurumsal E-posta:</strong> <a href={`mailto:${selectedLead.email}`} style={{ color: 'var(--primary)' }}>{selectedLead.email}</a></div>
@@ -198,15 +199,15 @@ export const LeadsTab: React.FC<LeadsTabProps> = ({ leads, onRefresh }) => {
               <div><strong>İlgilenilen Paket:</strong> {selectedLead.interestedPackage || 'Belirtilmedi'}</div>
               <div>
                 <strong>Entegre Edilecek Pazaryerleri:</strong>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
                   {selectedLead.marketplaces.map(mp => (
-                    <span key={mp} className="badge">{mp}</span>
+                    <span key={mp} className="badge" style={{ fontSize: 10 }}>{mp}</span>
                   ))}
                 </div>
               </div>
               <div>
                 <strong>Talep Notu / Açıklama:</strong>
-                <div style={{ background: 'var(--bg-secondary)', padding: 12, border: '1px solid var(--border-color)', borderRadius: 2, marginTop: 6, fontSize: 13 }}>
+                <div style={{ background: 'var(--bg-secondary)', padding: 10, border: '1px solid var(--border-color)', borderRadius: 2, marginTop: 4, fontSize: 12 }}>
                   {selectedLead.notes || 'Özel bir not belirtilmemiş.'}
                 </div>
               </div>
@@ -215,7 +216,7 @@ export const LeadsTab: React.FC<LeadsTabProps> = ({ leads, onRefresh }) => {
                 <strong>Durum:</strong>
                 <select
                   className="form-input"
-                  style={{ marginTop: 6, width: '100%' }}
+                  style={{ marginTop: 4, width: '100%', height: 32, fontSize: 12 }}
                   value={selectedLead.status}
                   onChange={(e) => handleStatusChange(selectedLead.id, e.target.value as DemoLead['status'])}
                 >
@@ -228,8 +229,8 @@ export const LeadsTab: React.FC<LeadsTabProps> = ({ leads, onRefresh }) => {
               </div>
             </div>
 
-            <div style={{ marginTop: 24, display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-              <button className="btn btn-secondary" onClick={() => setSelectedLead(null)}>
+            <div style={{ marginTop: 16, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => setSelectedLead(null)}>
                 Tamam
               </button>
             </div>

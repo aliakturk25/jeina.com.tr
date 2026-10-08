@@ -30,12 +30,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   ];
 
   return (
-    <div className="admin-wrap">
+    <div className="admin-layout">
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="admin-brand">
-          <span style={{ fontSize: 20, fontWeight: 800, color: '#ffffff' }}>JEINA</span>
-          <span style={{ fontSize: 11, color: '#94a3b8' }}>Web CMS</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 18, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em' }}>JEINA</span>
+            <span style={{ fontSize: 10, background: '#1e293b', color: '#94a3b8', padding: '2px 6px', borderRadius: 2, fontWeight: 700 }}>CMS</span>
+          </div>
         </div>
 
         <nav className="admin-nav">

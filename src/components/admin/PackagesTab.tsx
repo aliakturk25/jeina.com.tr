@@ -128,52 +128,52 @@ export const PackagesTab: React.FC<PackagesTabProps> = ({ packages, onRefresh })
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--border-dark)' }}>Paket ve Fiyat Yönetimi</h2>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+          <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)', margin: 0, letterSpacing: '-0.02em' }}>Paket ve Fiyat Yönetimi</h2>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
             Tanıtım sitesindeki fiyatlandırma tablosunu düzenleyin, yeni entegrasyon paketleri ekleyin veya fiyatları güncelleyin.
           </p>
         </div>
-        <button className="btn btn-primary" onClick={openNew}>
+        <button className="btn btn-primary btn-sm" style={{ padding: '6px 14px', fontSize: 12 }} onClick={openNew}>
           + Yeni Paket Ekle
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
         {packages.map(pkg => (
-          <div key={pkg.id} className="sharp-card" style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+          <div key={pkg.id} className="sharp-card" style={{ padding: 16, borderRadius: 4, display: 'flex', flexDirection: 'column', position: 'relative' }}>
             {pkg.badge && (
-              <span className={`badge ${pkg.isPopular ? 'badge-primary' : ''}`} style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
+              <span className={`badge ${pkg.isPopular ? 'badge-primary' : ''}`} style={{ alignSelf: 'flex-start', marginBottom: 6, fontSize: 10 }}>
                 {pkg.badge}
               </span>
             )}
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)' }}>{pkg.name}</h3>
-            <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: '4px 0 14px 0' }}>{pkg.description}</p>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: 'var(--border-dark)', margin: 0 }}>{pkg.name}</h3>
+            <p style={{ fontSize: 11, color: 'var(--text-subtle)', margin: '4px 0 10px 0' }}>{pkg.description}</p>
 
-            <div style={{ padding: '10px 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', marginBottom: 14 }}>
-              <div style={{ fontSize: 22, fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
-                ₺{pkg.priceMonthly.toLocaleString('tr-TR')} <span style={{ fontSize: 12, color: 'var(--text-subtle)' }}>/ ay (Aylık)</span>
+            <div style={{ padding: '8px 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', marginBottom: 10 }}>
+              <div style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
+                ₺{pkg.priceMonthly.toLocaleString('tr-TR')} <span style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 500 }}>/ ay</span>
               </div>
-              <div style={{ fontSize: 14, color: 'var(--primary)', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>
-                ₺{pkg.priceAnnualMonthly.toLocaleString('tr-TR')} / ay (Yıllık Sözleşmeli)
+              <div style={{ fontSize: 12, color: 'var(--primary)', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>
+                ₺{pkg.priceAnnualMonthly.toLocaleString('tr-TR')} / ay (Yıllık)
               </div>
             </div>
 
-            <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 3 }}>
               <div><strong>Pazaryeri:</strong> {pkg.marketplaceCount}</div>
               <div><strong>Hız:</strong> {pkg.syncSpeed}</div>
               <div><strong>Depo Masası:</strong> {pkg.warehouseModule}</div>
               <div><strong>Fiyat Kalkanı:</strong> {pkg.priceProtection}</div>
             </div>
 
-            <div style={{ marginTop: 'auto', display: 'flex', gap: 8 }}>
-              <button className="btn btn-secondary btn-sm" style={{ flexGrow: 1 }} onClick={() => openEdit(pkg)}>
+            <div style={{ marginTop: 'auto', display: 'flex', gap: 6 }}>
+              <button className="btn btn-secondary btn-sm" style={{ flexGrow: 1, padding: '4px 8px', fontSize: 11 }} onClick={() => openEdit(pkg)}>
                 Düzenle
               </button>
               <button
                 className="btn btn-secondary btn-sm"
-                style={{ color: 'var(--danger)' }}
+                style={{ color: 'var(--danger)', padding: '4px 8px', fontSize: 11 }}
                 onClick={() => handleDelete(pkg.id)}
               >
                 Sil
@@ -197,12 +197,12 @@ export const PackagesTab: React.FC<PackagesTabProps> = ({ packages, onRefresh })
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="sharp-card" style={{ width: 680, maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, borderBottom: '1px solid var(--border-color)', paddingBottom: 14 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 800 }}>
+          <div className="sharp-card" style={{ width: 620, maxHeight: '90vh', overflowY: 'auto', padding: 20, borderRadius: 4 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid var(--border-color)', paddingBottom: 10 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 800, margin: 0 }}>
                 {isCreating ? 'Yeni Entegrasyon Paketi Ekle' : `${editingPkg?.name} Düzenle`}
               </h3>
-              <button className="btn btn-secondary btn-sm" onClick={() => { setIsCreating(false); setEditingPkg(null); }}>
+              <button className="btn btn-secondary btn-sm" style={{ padding: '4px 8px', fontSize: 11 }} onClick={() => { setIsCreating(false); setEditingPkg(null); }}>
                 Kapat
               </button>
             </div>

@@ -15,9 +15,9 @@ export const MessagesTab: React.FC<MessagesTabProps> = ({ messages, onRefresh })
 
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--border-dark)' }}>İletişim Mesajları</h2>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+      <div style={{ marginBottom: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--border-dark)', margin: 0, letterSpacing: '-0.02em' }}>İletişim Mesajları</h2>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
           Tanıtım sitesindeki genel iletişim formundan gelen sorular ve teklif talepleri.
         </p>
       </div>
